@@ -1,4 +1,4 @@
-# Personal_Portfolio
+# Personal Portfolio
 
 This repo is for the express purpose of me creating a React based project which will ultimately display a variety of skill sets such as both front end and back end capabilities along with working with API and also 3D tools. I ultimately intend to create 3 examples of work I've done in the past in a single spot.
 
