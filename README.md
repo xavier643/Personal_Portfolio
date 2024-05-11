@@ -16,7 +16,7 @@ This component demonstrates integration of Unity with WebGL to create interactiv
 ### 3. ThreeJS GLTF Viewer
 A tool built with ThreeJS that mirrors the functionalities of the Sketchfab and Unity projects, focusing on handling GLTF files for 3D model reviews.
 
-### 4. Universal Comment System
+## Universal Comment System
 A robust comment system is integrated across all three components, enhancing user interaction and feedback. Key features include:
 - **Client Role:** Clients can create comments, flag resolutions, and request clarifications.
 - **Admin Role:** Admins have permissions to edit and delete comments to manage scope and ensure accurate feedback.
