@@ -1,10 +1,34 @@
 # Personal Portfolio
 
-This repo is for the express purpose of me creating a React based project which will ultimately display a variety of skill sets such as both front end and back end capabilities along with working with API and also 3D tools. I ultimately intend to create 3 examples of work I've done in the past in a single spot.
+## Overview
+This repository hosts a React-based project designed to showcase a variety of technical skills, including front-end and back-end development, API integration, and 3D tools. The project consists of three distinct examples demonstrating past work, all in one consolidated platform.
 
-These 3 examples will be as follows in order of priority:
-- A tool that allows people to review models hosted on Sketchfab. This includes features such as scanning the model and identifying key objects with a specific substring in their name in order to create buttons that allow them to hide/show particular parts and a comment system for providing feedback. This comment system will have different roles. Clients will be able to create comments and flag if their comment is closed or not after seeing changes that satisfy them plus adding additional comments for clarification as necessary. A role of Admin which will be able to edit and delete comments, Clients can not edit their own comments because if they did while someone was making changes based on a previous way it was written it creates potential scope creep for the artist but an Admin will be able to make adjustments if requested and reasonable. Then there will be a role that will likely be referred to something such as Employee, these are company employees who will be able to reply to client comments with updates to report changes and such.
-- A Unity WebGL project which will demonstrate my knowledge and experience with Unity and hosting it in WebGL. I intend for this to serve a very similar role as the previous tool that ties in to Sketchfab except it will have Unity based system. While Unity is often a full self contained system I will be designing this in a way where user interactions with the 3D environment such as clicking on an object will be able to inform the browser and update data displayed and also will make it so the browser has the ability to send messages in to Unity as well. I've done this previously and it felt like a challenge to tie the two together and would like to demonstrate the ability again.
-- A ThreeJS project which will again serve a similar purpose as the Sketchfab and Unity in which it can be used for a tool to review 3D models but it will be running off GLTFs. This final version is just another option of how these can all be done.
+## Project Components
 
-What I'd like to learn while doing this is performance considerations. One challenge I've experienced in the past is ensuring that Unity and ThreeJS both are run well on a variety of lower end machines, particularly when going through a variety of firewalls and vpns, which this happened due to most of my previous projects being used by government agencies. I'd also like this chance to work on improving my backend some. While previously I have done a comment tool like this in PHP and I had proper pagination for comments and I did not when I did a similar project in React due to the # of comments being so low at any given point that pagination wasn't a concern but it should always be considered.
+### 1. Sketchfab Review Tool
+This tool enables users to interact with 3D models hosted on Sketchfab. Key features include:
+- **Dynamic Part Management:** Users can scan models to identify and toggle visibility of specific parts based on substring matching in their names.
+- **Comment System:** Supports different user roles:
+  - **Clients** can create comments, flag resolutions, and request clarifications.
+  - **Admins** have permissions to edit and delete comments to manage scope and ensure accurate feedback.
+  - **Employees** can respond to comments, providing updates and changes.
+
+### 2. Unity WebGL Integration
+This component demonstrates integration of Unity with WebGL to create interactive 3D environments. Features include:
+- **Interaction Between Unity and Browsers:** Users can interact with the Unity environment which in turn updates the browser display, and vice versa, demonstrating seamless integration.
+
+### 3. ThreeJS GLTF Viewer
+A tool built with ThreeJS that mirrors the functionalities of the Sketchfab and Unity projects, focusing on handling GLTF files for 3D model reviews.
+
+## Shared Backend
+All three components share a common backend built with Apollo Server, GraphQL, and MongoDB, optimizing resource use and maintenance. Key aspects include:
+- **User Management:** Handles user authentication and role-based permissions.
+- **Model Management:** Manages a database of 3D models, facilitating dynamic data updates across different platforms.
+- **Comment Management:** A robust system to link comments with specific models, enhancing user interaction.
+
+## Learning Goals
+- **Performance Optimization:** Special focus on optimizing performance for low-end devices and navigating through complex network restrictions typically encountered in governmental project deployments.
+- **Backend Improvement:** Enhancing backend capabilities, including implementing efficient data handling and pagination for scalable user interactions.
+
+## Why a Single Repository?
+Combining all three components into one repository allows for shared backend services, reducing redundancy and fostering a cohesive development environment.
