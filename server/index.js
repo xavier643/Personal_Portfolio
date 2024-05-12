@@ -1,28 +1,23 @@
 const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
+const typeDefs = require('./schemas');
+const resolvers = require('./resolvers');
+const connectDB = require('./config/db')
 
-// Define your schema directly as a GraphQL type definition string
-const typeDefs = `
-  type Query {
-    hello: String
-  }
-`;
+require('dotenv').config();
 
-// Define your resolvers as usual
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-};
+connectDB();
 
 // Create and start your Apollo Server
 async function startServer() {
   const server = new ApolloServer({ typeDefs, resolvers });
+  
+  // Start standalone server
   await startStandaloneServer(server, {
     listen: { port: 4000 },
+  }).then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`);
   });
-
-  console.log(`🚀 Server ready at http://localhost:4000`);
 }
 
 startServer();
