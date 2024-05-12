@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { useQuery, gql } from '@apollo/client';
+
+const GET_HELLO = gql`
+  query GetHello {
+    hello
+  }
+`;
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const { loading, error, data } = useQuery(GET_HELLO);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) {
+    console.log(error);
+    return <p>Error loading data!</p>;
+  }
+
+  console.log("Data received from GraphQL:", data);
+  return <div>New Hello from GraphQL: {data.hello}</div>;
 }
 
 export default App;
