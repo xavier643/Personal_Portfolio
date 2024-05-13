@@ -4,6 +4,7 @@ const userSchema = require('./userSchema');
 const helloSchema = `
   type Query {
     hello: String
+    protectedData: String
   }
 `;
 

@@ -8,7 +8,16 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true  // Ensures email addresses are unique in the database
+  },
+  username: {
+    type: String,
+    required: true,
+    unique: true  // Optionally make username unique as well
+  },
+  password: {
+    type: String,
+    required: true
   }
 });
 
