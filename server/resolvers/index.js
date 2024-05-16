@@ -1,5 +1,6 @@
 // resolvers.js
 const userResolvers = require('./userResolvers');
+const generateToken = require('../authentication/generateToken')
 
 const resolvers = {
   Query: {
@@ -7,12 +8,16 @@ const resolvers = {
       return "Hello world! Connection to backend succeeded!!";
     },
     protectedData: (parent, args, contextValue) => {
-      console.log("here...")
-      console.log(contextValue)
       if (!contextValue.user) {
         throw new Error("Not authenticated");
       }
-      return "This is protected data available only to authenticated users.";
+
+      const newToken = generateToken(contextValue.user);
+
+      return {
+        message: "This is new message where you were authorized",
+        token: newToken
+      }
     },
     ...userResolvers.Query
   },
