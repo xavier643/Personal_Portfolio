@@ -1,11 +1,13 @@
 const userSchema = `
 type Query {
-  users: [User]
+  users(limit: Int, skip: Int): [User]
 }
 
 type Mutation {
   login(username: String!, password: String!): AuthPayload
-  addUser(name: String!, email: String!, username: String!, password: String!): User
+  addUser(name: String!, email: String!, username: String!, password: String!, role: String): User
+  updateUser(id: ID!, name: String, email: String, username: String, password: String, role: String): User
+  deleteUser(id: ID!): Boolean
   refreshToken: AuthPayload
 }
 
@@ -20,6 +22,9 @@ type User {
   username: String
   name: String
   email: String
+  role: String
+  createdAt: String
+  updatedAt: String
 }
 `;
 

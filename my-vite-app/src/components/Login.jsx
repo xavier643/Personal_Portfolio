@@ -14,10 +14,12 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await login({ variables: { username, password } });
-      const { token, expiresIn } = data.login;
+      const { token, expiresIn, user } = data.login;
       localStorage.setItem('token', token);
       const expirationTime = Date.now() + expiresIn * 1000;
       localStorage.setItem('tokenExpiration', expirationTime);
+      const stringifiedUser = JSON.stringify(user);
+      localStorage.setItem('user', stringifiedUser);
       navigate('/');
     } catch (err) {
       console.error(err);
