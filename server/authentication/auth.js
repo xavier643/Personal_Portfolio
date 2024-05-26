@@ -38,13 +38,13 @@ passport.deserializeUser(async (id, done) => {
 
 // User registration function
 const addUser = async ({
-  name, email, username, password,
+  name, email, username, password, role = 'user'
 }) => {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
 
   const newUser = new User({
-    name, email, username, password: hashedPassword,
+    name, email, username, password: hashedPassword, role
   });
   await newUser.save();
   return newUser;
@@ -70,4 +70,48 @@ const login = async (username, password) => {
   };
 };
 
-module.exports = { passport, addUser, login };
+// User update function
+const updateUser = async ({ id, name, email, username, password, role }) => {
+  const user = await User.findById(id);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const updateFields = {};
+  if (name) updateFields.name = name;
+  if (email && email !== user.email) updateFields.email = email;
+  if (username && username !== user.username) updateFields.username = username;
+  if (password) {
+    const salt = bcrypt.genSaltSync(10);
+    updateFields.password = bcrypt.hashSync(password, salt);
+  }
+  if (role) updateFields.role = role;
+
+  if (email && email !== user.email) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser && existingUser.id !== id) {
+      throw new Error('Email already in use');
+    }
+    updateFields.email = email;
+  }
+
+  if (username && username !== user.username) {
+    const existingUser = await User.findOne({ username });
+    if (existingUser && existingUser.id !== id) {
+      throw new Error('Username already in use');
+    }
+    updateFields.username = username;
+  }
+
+  Object.assign(user, updateFields);
+  await user.save();
+  return user;
+};
+
+// User delete function
+const deleteUser = async (id) => {
+  const result = await User.findByIdAndDelete(id);
+  return result ? true : false;
+};
+
+module.exports = { passport, addUser, login, updateUser, deleteUser };

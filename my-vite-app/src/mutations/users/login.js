@@ -5,6 +5,12 @@ export const LOGIN_MUTATION = gql`
     login(username: $username, password: $password) {
       token
       expiresIn
+      user {
+        username
+        name
+        email
+        role
+      }
     }
   }
 `

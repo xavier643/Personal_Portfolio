@@ -19,16 +19,17 @@ async function startServer() {
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
     context: async ({ req }) => {
-      console.log('inside context');
+      // console.log('inside context');
       const token = req.headers.authorization || '';
       if (token) {
         try {
           // Remove "Bearer " prefix if present
           const actualToken = token.replace('Bearer ', '');
           const user = jwt.verify(actualToken, process.env.JWT_SECRET);
+          console.log('User:', user);
           return { user };
         } catch (err) {
-          console.error('Token verification failed:', err);
+          // console.error('Token verification failed:', err);
         }
       }
       return {};

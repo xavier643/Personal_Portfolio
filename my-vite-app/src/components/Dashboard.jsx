@@ -1,47 +1,24 @@
-import { useQuery } from '@apollo/client';
-import { GET_USERS } from '../queries/users/getUsers';
-import { Container, Row, Col, Button, ListGroup, Spinner, Alert } from 'react-bootstrap';
+import UserList from './UserList';
+import { Container, Row, Col, Button} from 'react-bootstrap';
 
 const Dashboard = () => {
-  const { loading, error, data } = useQuery(GET_USERS);
-
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('tokenExpiration');
+    localStorage.removeItem('user');
     window.location.href = '/login';
   };
 
-  if (loading) {
-    return (
-      <Container className="mt-5">
-        <Row className="justify-content-md-center">
-          <Col md={6}>
-            <Spinner animation="border" />
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-
-  if (error) {
-    return (
-      <Container className="mt-5">
-        <Row className="justify-content-md-center">
-          <Col md={6}>
-            <Alert variant="danger">
-              Error: {error.message}
-            </Alert>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+  const user = JSON.parse(localStorage.getItem('user'));
+  console.log(user);
 
   return (
     <Container className="mt-5">
       <Row className="mb-4">
-        <Col>
-          <h1>Dashboard</h1>
+        <Col xs={8}>
+          <h1>Welcome {user.name}</h1>
+        </Col>
+        <Col xs={4} className="text-end">
           <Button variant="danger" onClick={handleLogout}>
             Logout
           </Button>
@@ -49,15 +26,12 @@ const Dashboard = () => {
       </Row>
       <Row>
         <Col>
-          <h2>Users</h2>
-          <ListGroup>
-            {data.users.map(user => (
-              <ListGroup.Item key={user.id}>
-                <p>Username: {user.username}</p>
-                <p>Email: {user.email}</p>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
+          {user.role === 'admin' 
+          ? ( <UserList />)
+          : (
+              <h2>Users do not have access to user list</h2>
+            )
+          }
         </Col>
       </Row>
     </Container>

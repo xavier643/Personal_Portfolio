@@ -36,6 +36,7 @@ const authLink = setContext(async (_, { headers }) => {
     if(result.data.refreshToken == null) {
       localStorage.removeItem('token');
       localStorage.removeItem('tokenExpiration');
+      localStorage.removeItem('user');
       // Optionally, redirect to login page or show a modal
       window.location.href = '/login';
     } else {
@@ -59,9 +60,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   console.log("graphQLErrors", graphQLErrors);
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message }) => {
-      if (message === 'Unauthorized' || message === 'Not authenticated') {
+      if (message === 'Not authenticated') {
         localStorage.removeItem('token');
         localStorage.removeItem('tokenExpiration');
+        localStorage.removeItem('user');
         window.location.href = '/login';
       }
     });
@@ -83,6 +85,7 @@ const checkTokenExpiration = async () => {
     console.log('!!!!!! Token expired !!!!!!');
     localStorage.removeItem('token');
     localStorage.removeItem('tokenExpiration');
+    localStorage.removeItem('user');
     window.location.href = '/login';
   } else if (token && tokenExpiration && Date.now() > tokenExpiration - 60000) {
     console.log("!!!!!! Token will expire soon !!!!!!")
