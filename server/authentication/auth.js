@@ -4,7 +4,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Adjust the path if necessary
-const {generateToken} = require('./generateToken'); // Adjust the path if necessary
+const {generateToken, expiresIn} = require('./generateToken'); // Adjust the path if necessary
 
 // Local strategy for username and password login
 passport.use(new LocalStrategy(async (username, password, done) => {
@@ -67,6 +67,7 @@ const login = async (username, password) => {
   return {
     token,
     user,
+    expiresIn
   };
 };
 

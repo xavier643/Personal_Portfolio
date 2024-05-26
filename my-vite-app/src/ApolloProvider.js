@@ -82,14 +82,17 @@ const checkTokenExpiration = async () => {
   const token = localStorage.getItem('token');
 
   if (tokenExpiration && Date.now() > tokenExpiration) {
-    console.log('!!!!!! Token expired !!!!!!');
     localStorage.removeItem('token');
     localStorage.removeItem('tokenExpiration');
     localStorage.removeItem('user');
     window.location.href = '/login';
   } else if (token && tokenExpiration && Date.now() > tokenExpiration - 60000) {
-    console.log("!!!!!! Token will expire soon !!!!!!")
-    toast.warn('Your session is about to expire. Please save your work.');
+    toast.warn(
+      'Your session is about to expire. Please save your work.',
+      {
+        autoClose: 10000, // Duration in milliseconds
+      }
+    );
   }
 };
 
