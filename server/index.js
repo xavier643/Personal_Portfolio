@@ -1,11 +1,11 @@
 // index.js
 const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
+const jwt = require('jsonwebtoken');
 const { passport } = require('./authentication/auth'); // Adjust the path if necessary
 const typeDefs = require('./schemas/index');
 const resolvers = require('./resolvers/index');
 const connectDB = require('./config/db');
-const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 connectDB();
@@ -13,13 +13,13 @@ connectDB();
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
   });
 
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
     context: async ({ req }) => {
-      console.log("inside context")
+      console.log('inside context');
       const token = req.headers.authorization || '';
       if (token) {
         try {
@@ -32,7 +32,7 @@ async function startServer() {
         }
       }
       return {};
-    }
+    },
   });
 
   console.log(`🚀 Server ready at ${url}`);
