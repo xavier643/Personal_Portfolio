@@ -16,6 +16,7 @@ const Login = () => {
       const { data } = await login({ variables: { username, password } });
       const { token, expiresIn, user } = data.login;
       localStorage.setItem('token', token);
+      // Store token expiration time in milliseconds
       const expirationTime = Date.now() + expiresIn * 1000;
       localStorage.setItem('tokenExpiration', expirationTime);
       const stringifiedUser = JSON.stringify(user);
