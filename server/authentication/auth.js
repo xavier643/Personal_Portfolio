@@ -4,7 +4,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Adjust the path if necessary
-const generateToken = require('./generateToken'); // Adjust the path if necessary
+const {generateToken} = require('./generateToken'); // Adjust the path if necessary
 
 // Local strategy for username and password login
 passport.use(new LocalStrategy(async (username, password, done) => {
@@ -37,11 +37,15 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // User registration function
-const addUser = async ({ name, email, username, password }) => {
+const addUser = async ({
+  name, email, username, password,
+}) => {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
 
-  const newUser = new User({ name, email, username, password: hashedPassword });
+  const newUser = new User({
+    name, email, username, password: hashedPassword,
+  });
   await newUser.save();
   return newUser;
 };
@@ -50,19 +54,19 @@ const addUser = async ({ name, email, username, password }) => {
 const login = async (username, password) => {
   const user = await User.findOne({ username });
   if (!user) {
-    throw new Error("No such user found");
+    throw new Error('No such user found');
   }
 
   const valid = bcrypt.compareSync(password, user.password);
   if (!valid) {
-    throw new Error("Invalid password");
+    throw new Error('Invalid password');
   }
 
   const token = generateToken(user);
 
   return {
     token,
-    user
+    user,
   };
 };
 

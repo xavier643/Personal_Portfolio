@@ -10,6 +10,7 @@ const helloSchema = `
   type ProtectedData {
     message: String
     token: String
+    expiresIn: Int
   }
 `;
 
