@@ -4,6 +4,7 @@ import { onError } from '@apollo/client/link/error';
 import { from } from '@apollo/client';
 import { toast } from 'react-toastify';
 
+
 // Create an http link:
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql', // replace with your server URL
@@ -14,8 +15,12 @@ const authLink = setContext(async (_, { headers }) => {
   const token = localStorage.getItem('token');
   const tokenExpiration = localStorage.getItem('tokenExpiration');
 
+  // time to refresh the token in milliseconds and also the time to show a warning message
+  const tokenRefreshMinutes = 30; // Define the number of minutes
+  const tokenRefreshTime = tokenRefreshMinutes * 60000; // Convert minutes to milliseconds
+
   // Check if the token is about to expire and refresh it if necessary
-  if (token && tokenExpiration && Date.now() > tokenExpiration - 60000) { // Refresh 1 minute before expiry
+  if (token && tokenExpiration && Date.now() > tokenExpiration - tokenRefreshTime) { 
     const response = await fetch('http://localhost:4000/graphql', {
       method: 'POST',
       headers: {
@@ -32,6 +37,7 @@ const authLink = setContext(async (_, { headers }) => {
       })
     });
     const result = await response.json();
+    console.log("result", result)
 
     if(result.data.refreshToken == null) {
       localStorage.removeItem('token');
@@ -40,6 +46,7 @@ const authLink = setContext(async (_, { headers }) => {
       // Optionally, redirect to login page or show a modal
       window.location.href = '/login';
     } else {
+      console.log("result.data.refreshToken", result.data.refreshToken)
       const newToken = result.data.refreshToken.token;
       const newTokenExpiration = Date.now() + result.data.refreshToken.expiresIn * 1000;
       localStorage.setItem('token', newToken);
@@ -81,12 +88,16 @@ const checkTokenExpiration = async () => {
   const tokenExpiration = localStorage.getItem('tokenExpiration');
   const token = localStorage.getItem('token');
 
+  // time to refresh the token in milliseconds and also the time to show a warning message
+  const tokenWarningMinutes = 5; // Define the number of minutes
+  const tokenWarningTime = tokenWarningMinutes * 60000; // Convert minutes to milliseconds
+
   if (tokenExpiration && Date.now() > tokenExpiration) {
     localStorage.removeItem('token');
     localStorage.removeItem('tokenExpiration');
     localStorage.removeItem('user');
     window.location.href = '/login';
-  } else if (token && tokenExpiration && Date.now() > tokenExpiration - 60000) {
+  } else if (token && tokenExpiration && Date.now() > tokenExpiration - tokenWarningTime) {
     toast.warn(
       'Your session is about to expire. Please save your work.',
       {
@@ -96,7 +107,7 @@ const checkTokenExpiration = async () => {
   }
 };
 
-// Check token expiration every 30 second
-setInterval(checkTokenExpiration, 30000);
+// Check token expiration every 60 second
+setInterval(checkTokenExpiration, 60000);
 
 export default client;

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const expiresIn = 5 * 60; // minutes converted to seconds
+const expiresIn = 60 * 60; // minutes converted to seconds
 
 const generateToken = (user) => jwt.sign({ id: user._id, username: user.username, role: user.role }, process.env.JWT_SECRET, {
   expiresIn: expiresIn, // Token expiration time

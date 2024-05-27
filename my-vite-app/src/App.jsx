@@ -15,11 +15,15 @@ const App = () => (
   <ApolloProvider client={client}>
     <Router>
       <ToastContainer />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      </Routes>
+      <div className="app-container">
+        <div className="main-content">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </div>
+      </div>
     </Router>
   </ApolloProvider>
 );
