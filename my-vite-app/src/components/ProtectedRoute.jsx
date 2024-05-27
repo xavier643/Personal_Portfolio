@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ element }) => {
   const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const isValidToken = (token) => {
     try {
@@ -13,7 +14,7 @@ const ProtectedRoute = ({ element }) => {
     }
   };
 
-  if (!token || !isValidToken(token)) {
+  if (!token || !isValidToken(token) || !user) {
     return <Navigate to="/login" replace />;
   }
 
