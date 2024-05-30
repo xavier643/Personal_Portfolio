@@ -5,11 +5,11 @@ const {generateToken, expiresIn} = require('../authentication/generateToken');
 const userResolvers = {
   Query: {
     users: async (parent, { limit = 5, skip = 0 }, contextValue) => {
-      if (!contextValue.user) {
-        throw new Error('Not authenticated');
-      } else if (contextValue.user.role !== 'admin') {
-        throw new Error('Not authorized');
-      }
+      // if (!contextValue.user) {
+      //   throw new Error('Not authenticated');
+      // } else if (contextValue.user.role !== 'admin') {
+      //   throw new Error('Not authorized');
+      // }
 
       return await User.find({}).limit(limit).skip(skip);
     },
@@ -40,9 +40,9 @@ const userResolvers = {
       return await updateUser({ id, name, email, username, password, role });
     },
     deleteUser: async (_, { id }, contextValue) => {
-      if (!contextValue.user || contextValue.user.role !== 'admin') {
-        throw new Error('Not authorized');
-      }
+      // if (!contextValue.user || contextValue.user.role !== 'admin') {
+      //   throw new Error('Not authorized');
+      // }
       return await deleteUser(id);
     },
   },

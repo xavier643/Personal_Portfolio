@@ -1,0 +1,31 @@
+@import 'variables';
+
+header {
+  width: 100%;
+  height: $header-height;
+  background-color: $background-dark;
+  color: white;
+  z-index: 1000;
+  display: flex; /* Use flexbox */
+  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Adjust as needed for horizontal alignment */
+  padding: 0 20px; /* Add some padding if needed */
+}
+
+.welcome-text {
+  font-size: 32px;
+}
+
+.logout-button {
+  margin: 0; /* Ensure no margin affects centering */
+  padding: 10px 20px; /* Adjust padding for desired size */
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}
