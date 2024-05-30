@@ -4,12 +4,14 @@ import client from './ApolloProvider';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import './css/main.css';
 
 // Import your components
+import Layout from './components/layouts/Layout';
 import Login from './components/Login';
-import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import Dashboard from './components/Dashboard';
+import UserList from './components/UserList';
 
 const App = () => (
   <ApolloProvider client={client}>
@@ -19,8 +21,13 @@ const App = () => (
         <div className="main-content">
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/*" element={<ProtectedRoute />}>
+              <Route element={<Layout />}>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="user-list" element={<UserList />} />
+                <Route path="*" element={<Navigate to="/dashboard" />} />
+              </Route>
+            </Route>
           </Routes>
         </div>
       </div>

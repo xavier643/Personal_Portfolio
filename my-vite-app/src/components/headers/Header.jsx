@@ -1,4 +1,3 @@
-import { Container, Row, Col, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 const Header = ({user}) => {
@@ -11,18 +10,8 @@ const Header = ({user}) => {
 
   return (
     <header>
-      <Container>
-        <Row className="mb-4">
-          <Col xs={8}>
-            <h1>Welcome {user.name}</h1>
-          </Col>
-          <Col xs={4} className="text-end">
-            <Button variant="danger" onClick={handleLogout}>
-              Logout
-            </Button>
-          </Col>
-        </Row>
-      </Container>
+      <div className='welcome-text'>Welcome {user.name}</div>
+      <button className="logout-button" onClick={handleLogout}>Logout</button>
     </header>
   );
 };
