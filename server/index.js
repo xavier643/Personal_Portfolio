@@ -18,7 +18,7 @@ async function startServer() {
   });
 
   const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
+    listen: { port: 4000, host: "0.0.0.0" },
     context: async ({ req }) => {
       // console.log('inside context');
       const token = req.headers.authorization || "";
