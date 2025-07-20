@@ -7,6 +7,7 @@ app = 'server-blue-flower-4985'
 primary_region = 'iad'
 
 [build]
+    command = "node index.js"
 
 [http_service]
   internal_port = 4000
