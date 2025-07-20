@@ -9,6 +9,7 @@ type Mutation {
   updateUser(id: ID!, name: String, email: String, username: String, password: String, role: String): User
   deleteUser(id: ID!): Boolean
   refreshToken: AuthPayload
+  logout: Boolean 
 }
 
 type AuthPayload {
