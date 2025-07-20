@@ -46,6 +46,10 @@ async function startServer() {
       }
       return {};
     },
+    cors: {
+      origin: process.env.FRONTEND_URL || "http://localhost:3000",
+      credentials: true,
+    },
   });
 
   console.log(`🚀 Server ready at ${url}`);
