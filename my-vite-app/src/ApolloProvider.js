@@ -6,7 +6,8 @@ import { toast } from "react-toastify";
 
 // Create an http link:
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql", // replace with your server URL
+  uri: import.meta.env.VITE_GRAPHQL_URI || "http://localhost:4000/graphql",
+  credentials: "include",
 });
 
 // Create a middleware link to set the token in the request headers
