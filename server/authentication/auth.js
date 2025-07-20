@@ -1,27 +1,30 @@
 // auth.js
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Adjust the path if necessary
-const {generateToken, expiresIn} = require('./generateToken'); // Adjust the path if necessary
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const { generateToken, expiresIn } = require("./generateToken");
+const { v4: uuidv4 } = require("uuid");
 
 // Local strategy for username and password login
-passport.use(new LocalStrategy(async (username, password, done) => {
-  try {
-    const user = await User.findOne({ username });
-    if (!user) {
-      return done(null, false, { message: 'Incorrect username.' });
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const user = await User.findOne({ username });
+      if (!user) {
+        return done(null, false, { message: "Incorrect username." });
+      }
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return done(null, false, { message: "Incorrect password." });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return done(null, false, { message: 'Incorrect password.' });
-    }
-    return done(null, user);
-  } catch (err) {
-    return done(err);
-  }
-}));
+  })
+);
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -37,14 +40,16 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // User registration function
-const addUser = async ({
-  name, email, username, password, role = 'user'
-}) => {
+const addUser = async ({ name, email, username, password, role = "user" }) => {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
 
   const newUser = new User({
-    name, email, username, password: hashedPassword, role
+    name,
+    email,
+    username,
+    password: hashedPassword,
+    role,
   });
   await newUser.save();
   return newUser;
@@ -52,30 +57,59 @@ const addUser = async ({
 
 // User login function
 const login = async (username, password) => {
+  console.log("logging in: ", username);
   const user = await User.findOne({ username });
   if (!user) {
-    throw new Error('No such user found');
+    throw new Error("No such user found");
   }
 
   const valid = bcrypt.compareSync(password, user.password);
   if (!valid) {
-    throw new Error('Invalid password');
+    throw new Error("Invalid password");
   }
 
-  const token = generateToken(user);
+  // Create a new session ID and save it to the user
+  const session_id = uuidv4();
+  user.session_id = session_id;
+  await user.save();
+
+  console.log("user: ", user);
+
+  const updatedUser = await User.findById(user._id); // pull the updated version
+  const token = generateToken(updatedUser);
+
+  console.log("updatedUser: ", updatedUser);
 
   return {
     token,
     user,
-    expiresIn
+    expiresIn,
   };
+};
+
+// User logout function
+const logout = async (_, __, contextValue) => {
+  console.log("logging out...");
+  if (!contextValue.user) {
+    throw new Error("Not authenticated");
+  }
+
+  const user = await User.findById(contextValue.user.id);
+  console.log("🔑 user in logout context:", contextValue.user);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  user.session_id = null;
+  await user.save();
+  return true;
 };
 
 // User update function
 const updateUser = async ({ id, name, email, username, password, role }) => {
   const user = await User.findById(id);
   if (!user) {
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 
   const updateFields = {};
@@ -91,7 +125,7 @@ const updateUser = async ({ id, name, email, username, password, role }) => {
   if (email && email !== user.email) {
     const existingUser = await User.findOne({ email });
     if (existingUser && existingUser.id !== id) {
-      throw new Error('Email already in use');
+      throw new Error("Email already in use");
     }
     updateFields.email = email;
   }
@@ -99,7 +133,7 @@ const updateUser = async ({ id, name, email, username, password, role }) => {
   if (username && username !== user.username) {
     const existingUser = await User.findOne({ username });
     if (existingUser && existingUser.id !== id) {
-      throw new Error('Username already in use');
+      throw new Error("Username already in use");
     }
     updateFields.username = username;
   }
@@ -115,4 +149,4 @@ const deleteUser = async (id) => {
   return result ? true : false;
 };
 
-module.exports = { passport, addUser, login, updateUser, deleteUser };
+module.exports = { passport, addUser, login, updateUser, deleteUser, logout };

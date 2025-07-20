@@ -60,7 +60,7 @@ const UserList = () => {
   const handleNext = () => {
     setPageIndex(pageIndex + 1);
     // Update the highestPageIndex if the current pageIndex is higher
-    highestPageIndex.current = Math.max(highestPageIndex.current, pageIndex + 1);
+    highestPageIndex.current = Math.max(highestPageIndex.current, pageIndex + 1); 
   };
 
   const handlePrevious = () => {

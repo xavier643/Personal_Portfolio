@@ -1,17 +1,22 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ApolloProvider } from '@apollo/client';
-import client from './ApolloProvider';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './css/main.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { ApolloProvider } from "@apollo/client";
+import client from "./ApolloProvider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./css/main.css";
 
 // Import your components
-import Layout from './components/layouts/Layout';
-import Login from './components/Login';
-import ProtectedRoute from './components/ProtectedRoute';
-import Dashboard from './components/Dashboard';
-import UserList from './components/UserList';
+import Layout from "./components/layouts/Layout";
+import Login from "./components/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./components/Dashboard";
+import UserList from "./components/UserList";
 
 const App = () => (
   <ApolloProvider client={client}>
