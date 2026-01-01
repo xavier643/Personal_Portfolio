@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGOUT_MUTATION } from "../../mutations/users/logout";
 
 const Header = ({ user }) => {
+  const navigate = useNavigate();
   const [logout] = useMutation(LOGOUT_MUTATION);
 
   const handleLogout = async () => {
@@ -13,7 +14,7 @@ const Header = ({ user }) => {
       localStorage.removeItem("token");
       localStorage.removeItem("tokenExpiration");
       localStorage.removeItem("user");
-      window.location.href = "/login";
+      navigate("/login");
     } catch (err) {
       console.error("Backend logout failed:", err);
     }
