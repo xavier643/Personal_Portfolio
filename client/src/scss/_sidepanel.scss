@@ -1,0 +1,28 @@
+@import 'variables';
+
+#sidebar {
+  height: 100%;
+  overflow-y: auto;
+  width: 100%; /* Ensure sidebar takes full width of its column */
+}
+
+.side-panel {
+  width: $sidebar-width;
+  background-color: #f8f9fa;
+  padding: 10px;
+  height: 100vh; // Ensure full height
+  position: fixed;
+  top: $header-height;
+}
+
+.side-panel-link {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+
+  &.active {
+    background-color: #007bff;
+    color: #fff;
+  }
+}
