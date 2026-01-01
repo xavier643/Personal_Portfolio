@@ -6,7 +6,8 @@ import { toast } from "react-toastify";
 
 // Create an http link:
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql", // replace with your server URL
+  uri: import.meta.env.VITE_GRAPHQL_URI || "http://localhost:4000/graphql",
+  credentials: "include",
 });
 
 // Create a middleware link to set the token in the request headers
@@ -24,36 +25,42 @@ const authLink = setContext(async (_, { headers }) => {
     tokenExpiration &&
     Date.now() > tokenExpiration - tokenRefreshTime
   ) {
-    const response = await fetch("http://localhost:4000/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        query: `mutation {
+    const response = await fetch(
+      import.meta.env.VITE_GRAPHQL_URI || "http://localhost:4000/graphql",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          query: `mutation {
           refreshToken {
             token
             expiresIn
           }
         }`,
-      }),
-    });
+        }),
+      }
+    );
     const result = await response.json();
     console.log("result", result);
 
     if (result.data.refreshToken == null) {
       try {
-        await fetch("http://localhost:4000/graphql", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            query: `mutation { logout }`,
-          }),
-        });
+        await fetch(
+          import.meta.env.VITE_GRAPHQL_URI || "http://localhost:4000/graphql",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              query: `mutation { logout }`,
+            }),
+          }
+        );
       } catch (err) {
         console.error("Backend logout failed:", err);
       }
