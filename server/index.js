@@ -21,7 +21,11 @@ async function startServer() {
     cors({
       origin: function (origin, callback) {
         console.log("🌐 Incoming CORS Origin:", origin);
-        const allowed = ["http://localhost:3000", process.env.FRONTEND_URL];
+        const allowed = [
+          "http://localhost:3000",
+          "http://localhost:4000",
+          process.env.FRONTEND_URL,
+        ].filter(Boolean);
         if (!origin || allowed.includes(origin)) {
           callback(null, true);
         } else {
